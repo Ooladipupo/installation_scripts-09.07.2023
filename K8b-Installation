@@ -23,7 +23,8 @@ sudo mkdir -p -m 755 /etc/apt/keyrings
 ### 4. Add Kubernetes Repository and GPG Key[On Master & Worker Node] check for the right version is installed. for this project, we are installing v1.29
 
 ```bash
-
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
 ### 5. Update Package List[On Master & Worker Node]
@@ -46,7 +47,10 @@ sudo apt-mark hold kubelet kubeadm kubectl
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
 
-### 8. Configure Kubernetes Cluster [On MasterNode]
+## copy the join command from the master node and install on the worker nodes. Make sure to save the command for future nodes younintend to add to the cluster.
+
+### 8. Configure Kubernetes Cluster [On MasterNode]. the below create a part for the kubernetes config file
+to be executed only on the master node.
 
 ```bash
 mkdir -p $HOME/.kube
@@ -57,7 +61,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ### 9. Deploy Networking Solution (Calico) [On MasterNode]
 
 ```bash
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
 ```
 
 ### 10. Deploy Ingress Controller (NGINX) [On MasterNode]
