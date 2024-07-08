@@ -20,11 +20,10 @@ sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
 sudo mkdir -p -m 755 /etc/apt/keyrings
 ```
 
-### 4. Add Kubernetes Repository and GPG Key[On Master & Worker Node]
+### 4. Add Kubernetes Repository and GPG Key[On Master & Worker Node] check for the right version is installed. for this project, we are installing v1.29
 
 ```bash
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
 ```
 
 ### 5. Update Package List[On Master & Worker Node]
@@ -36,7 +35,9 @@ sudo apt update
 ### 6. Install Kubernetes Components[On Master & Worker Node]
 
 ```bash
-sudo apt install -y kubeadm=1.29.1-1.1 kubelet=1.29.1-1.1 kubectl=1.29.1-1.1
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
 ### 7. Initialize Kubernetes Master Node [On MasterNode]
